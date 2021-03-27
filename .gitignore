@@ -1,0 +1,13 @@
+# Cache and Config
+.vscode
+
+# Credentials
+credentials/
+
+# Statefiles
+**.tfstate
+**.tfstate.backup
+
+# misc
+.DS_Store
+**.csv
