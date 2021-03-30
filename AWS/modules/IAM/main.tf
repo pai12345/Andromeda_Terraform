@@ -1,18 +1,3 @@
-terraform {
-  required_providers {
-    aws = {
-      source = "hashicorp/aws"
-      version = "3.34.0"
-    }
-  }
-  #   backend "remote" {
-  #   organization = "Andromeda_Terraform_Cloud"
-  #   workspaces {
-  #     name = "Andromeda_Terraform_Workspace"
-  #   }
-  # }
-}
-
 #===================IAM User=================#
 resource "aws_iam_user" "iam_users"{
     for_each = {for i,v in var.variable_iam_user: i =>v}
@@ -22,34 +7,12 @@ resource "aws_iam_user" "iam_users"{
     tags = each.value["tags"]
 }
 
-# #===================IAM User Login Profile=================#
-# resource "aws_iam_user_login_profile" "iam_user_login_details" {
-#   for_each = {for i,v in var.variable_iam_user: i =>v}
-#   user    = each.value["name"]
-#   pgp_key = "keybase:${each.value["name"]}"
-#   password_length = each.value["password"]
-#   password_reset_required = each.value["password_reset_required"]
-#   depends_on = [
-#     aws_iam_user.iam_users
-#   ]
-# }
-
 #===================IAM Policy=================#
 resource "aws_iam_policy" "iam_policy" {
   name        = var.variable_iam_policy["name"] 
   path        = var.variable_iam_policy["path"] 
-  description = var.variable_iam_policy["description"] 
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = "*"
-        Effect   = "Allow"
-        Resource = "*"
-      },
-    ]
-  })
+  description = var.variable_iam_policy["description"]xs
+  policy = file("../modules/IAM/policy_documents/iam_policy.json")
 }
 
 #===================IAM Group=================#

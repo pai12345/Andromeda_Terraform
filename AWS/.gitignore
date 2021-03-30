@@ -1,0 +1,17 @@
+# Cache and Config
+.vscode
+
+# terraform
+**.terraform/
+**.terraform.lock.hcl
+**.tfstate.lock.info
+**.tfstate.d/
+**.tfstate
+**.tfstate.backup
+**.tfvars
+
+# logs
+**.log
+
+#misc
+.DS_Store
