@@ -11,8 +11,8 @@ resource "aws_iam_user" "iam_users"{
 resource "aws_iam_policy" "iam_policy" {
   name        = var.variable_iam_policy["name"] 
   path        = var.variable_iam_policy["path"] 
-  description = var.variable_iam_policy["description"]xs
-  policy = file("../modules/IAM/policy_documents/iam_policy.json")
+  description = var.variable_iam_policy["description"]
+  policy = file("./policy_documents/iam_policy.json")
 }
 
 #===================IAM Group=================#
