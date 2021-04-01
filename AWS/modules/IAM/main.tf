@@ -1,6 +1,12 @@
+#===================Local Variables=================#
+locals {
+  user_generate = {for i,v in var.variable_iam_user: i =>v}
+}
+
+
 #===================IAM User=================#
 resource "aws_iam_user" "iam_users"{
-    for_each = {for i,v in var.variable_iam_user: i =>v}
+    for_each = local.user_generate
     name = each.value["name"]
     path = each.value["path"]
     force_destroy = each.value["force_destroy"]
@@ -12,7 +18,7 @@ resource "aws_iam_policy" "iam_policy" {
   name        = var.variable_iam_policy["name"] 
   path        = var.variable_iam_policy["path"] 
   description = var.variable_iam_policy["description"]
-  policy = file("./policy_documents/iam_policy.json")
+  policy = file("${path.module}/policy_documents/iam_policy.json")
 }
 
 #===================IAM Group=================#

@@ -7,26 +7,7 @@ variable "variable_iam_user" {
     password_reset_required = string
     tags = map(string) 
   }))
-  default = [{
-    name = "pai1"
-    path = "/home/"
-    force_destroy = true
-    password = 20
-    password_reset_required = "true"
-    tags = {
-        superuser = "user having root access/admin rights"
-    }
-  },
-  {
-    name = "pai2"
-    path = "/home/"
-    force_destroy = true
-    password = 20
-    password_reset_required = "true"
-    tags = {
-        superuser = "user having root access/admin rights"
-    }
-  }]
+  sensitive = false
 }
 
 variable "variable_iam_policy" {
@@ -40,6 +21,7 @@ variable "variable_iam_policy" {
     description = "IAM policy for root user"
     path = "/home/"
   }
+  sensitive = false
 }
 
 variable "variable_iam_group" {
@@ -51,4 +33,5 @@ variable "variable_iam_group" {
     name = "supergroup"
     path = "/home/"
   }
+  sensitive = false
 }

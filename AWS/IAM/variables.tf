@@ -1,0 +1,1 @@
+variable "variable_iam_user" {}
