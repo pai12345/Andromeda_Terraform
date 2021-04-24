@@ -1,12 +1,16 @@
 # Cache and Config
 .vscode
 
-# Credentials
-credentials/
-
-# Statefiles
+# terraform
+**.terraform/
+**.terraform.lock.hcl
+**.tfstate.lock.info
+**.tfstate.d/
 **.tfstate
 **.tfstate.backup
+
+# logs
+**.log
 
 # misc
 .DS_Store
