@@ -8,6 +8,13 @@
 # terraform
 **.terraform/
 **.terraform.lock.hcl
+**.json
 
-#misc
+# misc
 .DS_Store
+LICENSE.md
+README.md
+
+# senistive
+**policy_documents/
+**trust_document/
