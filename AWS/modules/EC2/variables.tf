@@ -55,8 +55,8 @@ variable "aws_vpc" {
   default = {
     cidr_block = "10.0.0.0/16",
     instance_tenancy = "default"
-    enable_dns_support = true
-    enable_dns_hostnames = true
+    enable_dns_support = false
+    enable_dns_hostnames = false
     tags = {
       type = "Andromeda_VPC"
     }
@@ -65,7 +65,9 @@ variable "aws_vpc" {
 
 # variable for aws_internet_gateway
 variable "aws_internet_gateway" {
-  type = map(string)
+  type = object({
+    tags = map(string)
+  })
   default = {
     tags = {
       Name = "Andromeda_Internet_Gateway"
