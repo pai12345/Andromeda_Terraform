@@ -53,7 +53,8 @@ variable "aws_vpc" {
     tags = map(string)
   })
   default = {
-    cidr_block = "10.0.0.0/16",
+    # cidr_block = "10.0.0.0/16",
+    cidr_block = "0.0.0.0/0"
     instance_tenancy = "default"
     enable_dns_support = false
     enable_dns_hostnames = false
@@ -92,7 +93,8 @@ variable "aws_subnet" {
     tags = map(string)
   })
   default = {
-    cidr_block = "10.0.1.0/24"
+    # cidr_block = "10.0.1.0/24"
+    cidr_block = "0.0.0.0/0"
     map_public_ip_on_launch = true
     tags = {
       Name = "Andromeda_Subnet"
@@ -168,7 +170,8 @@ variable "http_secgrp" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["10.0.0.0/16"]
+    # cidr_blocks = ["10.0.0.0/16"]
+    cidr_block = "0.0.0.0/0"
   }
   egress = {
     from_port   = 0
@@ -195,4 +198,13 @@ variable "aws_instance" {
       Name = "Andromeda_EC2"
     }
   }
+}
+
+# variable for vpc_id
+variable "vpc_id"{
+  description = "Data for VPC id"
+}
+
+variable "iam_instance_profile"{
+  description = "Data for IAM Instance Profile"
 }

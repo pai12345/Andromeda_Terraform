@@ -45,16 +45,16 @@ resource "aws_security_group" "elb_securitygroup" {
 
 # Create a HTTP Load Balancer
 resource "aws_lb" "http_elb" {
-  name               = var.aws_lb["name"]
-  internal           = var.aws_lb["internal"]
-  load_balancer_type = var.aws_lb["load_balancer_type"]
+  name               = var.http_elb["name"]
+  internal           = var.http_elb["internal"]
+  load_balancer_type = var.http_elb["load_balancer_type"]
   security_groups    = [aws_security_group.elb_securitygroup.id]
   subnets            = [aws_subnet.elb_subnet.id]
-  idle_timeout = var.aws_lb["idle_timeout"]
-  enable_deletion_protection = var.aws_lb["enable_deletion_protection"]
-  enable_cross_zone_load_balancing = var.aws_lb["enable_cross_zone_load_balancing"]
-  enable_http2 = var.aws_lb["enable_http2"]
-  tags = var.aws_lb["tags"]
+  idle_timeout = var.http_elb["idle_timeout"]
+  enable_deletion_protection = var.http_elb["enable_deletion_protection"]
+  enable_cross_zone_load_balancing = var.http_elb["enable_cross_zone_load_balancing"]
+  enable_http2 = var.http_elb["enable_http2"]
+  tags = var.http_elb["tags"]
 }
 
 # Create HTTP ELB Target Group

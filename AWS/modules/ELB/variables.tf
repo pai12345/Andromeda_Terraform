@@ -6,7 +6,8 @@ variable "aws_subnet" {
         map_public_ip_on_launch = bool
     })
     default = {
-        cidr_block = "10.0.1.0/24"
+        # cidr_block = "10.0.1.0/24"
+        cidr_block = "0.0.0.0/0"
         map_public_ip_on_launch = true
     }
 }
@@ -49,7 +50,7 @@ variable "aws_security_group_elb" {
 }
 
 # variable for aws_lb
-variable "aws_lb" {
+variable "http_elb" {
     description = "Data for HTTP ELB"
     type = object({
         name = string
@@ -62,7 +63,7 @@ variable "aws_lb" {
         tags = map(string)
     })
     default = {
-        name               = "http_elb"
+        name               = "httpelb"
         internal           = false
         load_balancer_type = "application"
         idle_timeout = 400
@@ -101,7 +102,7 @@ variable "http_target_group" {
         target_type = string
     })
     default = {
-        name = "http_target_group"
+        name = "httptargetgroup"
         deregistration_delay = 300
         health_check = {
             enabled = true

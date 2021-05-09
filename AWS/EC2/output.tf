@@ -19,7 +19,6 @@ output output_generate_ec2_instance {
     description = "Output for Module - EC2"
 }
 
-
 #===================Output Module generate_http_elb=================#
 output output_generate_http_elb {
     value=module.generate_http_elb

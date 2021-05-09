@@ -12,25 +12,25 @@ data "aws_ami" "ubuntu" {
   owners = var.aws_ami_ubuntu["owners"]
 }
 
-# Fetch IAM instance profile
-data "aws_iam_instance_profile" "iam_role_ec2" {
-  name = "ec2_instanceprofile"
-}
+# # Fetch IAM instance profile
+# data "aws_iam_instance_profile" "iam_role_ec2" {
+#   name = "ec2_instanceprofile"
+# }
 
-# Create VPC to launch the instances into
-resource "aws_vpc" "default" {
-  cidr_block = var.aws_vpc["cidr_block"]
-  instance_tenancy = var.aws_vpc["instance_tenancy"]
-  enable_dns_support = var.aws_vpc["enable_dns_support"]
-  enable_dns_hostnames = var.aws_vpc["enable_dns_hostnames"]
-  tags = var.aws_vpc["tags"]
-}
+# # Create VPC to launch the instances into
+# resource "aws_vpc" "default" {
+#   cidr_block = var.aws_vpc["cidr_block"]
+#   instance_tenancy = var.aws_vpc["instance_tenancy"]
+#   enable_dns_support = var.aws_vpc["enable_dns_support"]
+#   enable_dns_hostnames = var.aws_vpc["enable_dns_hostnames"]
+#   tags = var.aws_vpc["tags"]
+# }
 
-# Create internet gateway to give subnet access to the outside world
-resource "aws_internet_gateway" "default" {
-  vpc_id = aws_vpc.default.id
-  tags = var.aws_internet_gateway["tags"]
-}
+# # Create internet gateway to give subnet access to the outside world
+# resource "aws_internet_gateway" "default" {
+#   vpc_id = aws_vpc.default.id
+#   tags = var.aws_internet_gateway["tags"]
+# }
 
 # Fetch Public Key
 resource "aws_key_pair" "web" {
@@ -38,16 +38,16 @@ resource "aws_key_pair" "web" {
   tags = var.aws_keypair_tag["tags"]
 }
 
-# Grant VPC internet access on its main route table
-resource "aws_route" "internet_access" {
-  route_table_id         = aws_vpc.default.main_route_table_id
-  destination_cidr_block = var.aws_route["destination_cidr_block"]
-  gateway_id             = aws_internet_gateway.default.id
-}
+# # Grant VPC internet access on its main route table
+# resource "aws_route" "internet_access" {
+#   route_table_id         = aws_vpc.default.main_route_table_id
+#   destination_cidr_block = var.aws_route["destination_cidr_block"]
+#   gateway_id             = aws_internet_gateway.default.id
+# }
 
 # Create Subnet to launch the instances into
 resource "aws_subnet" "default" {
-  vpc_id                  = aws_vpc.default.id
+  vpc_id                  = var.vpc_id
   cidr_block              = var.aws_subnet["cidr_block"]
   map_public_ip_on_launch = var.aws_subnet["map_public_ip_on_launch"]
   tags = var.aws_subnet["tags"]
@@ -57,7 +57,7 @@ resource "aws_subnet" "default" {
 resource "aws_security_group" "ssh_secgrp" {
   name        = var.ssh_secgrp["name"]
   description = var.ssh_secgrp["description"]
-  vpc_id      = aws_vpc.default.id
+  vpc_id      = var.vpc_id
 
   # SSH access
   ingress {
@@ -81,7 +81,7 @@ resource "aws_security_group" "ssh_secgrp" {
 resource "aws_security_group" "http_secgrp" {
   name        = var.http_secgrp["name"]
   description = var.http_secgrp["description"]
-  vpc_id      = aws_vpc.default.id
+  vpc_id      = var.vpc_id
 
   # HTTP access
   ingress {
@@ -119,7 +119,7 @@ resource "aws_instance" "web" {
   subnet_id = aws_subnet.default.id
 
   # Attach role
-  iam_instance_profile = data.aws_iam_instance_profile.iam_role_ec2.name
+  iam_instance_profile = var.iam_instance_profile
   
   # Tags
   tags = var.aws_instance["tags"]

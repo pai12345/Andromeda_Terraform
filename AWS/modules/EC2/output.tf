@@ -4,23 +4,23 @@ output "output_EC2" {
   value = aws_instance.web
 }
 
-# Output for VPC
-output "output_aws_vpc" {
-  description = "Output for VPC"
-  value = aws_vpc.default
-}
+# # Output for VPC
+# output "output_aws_vpc" {
+#   description = "Output for VPC"
+#   value = aws_vpc.default
+# }
 
-# Output for Internet Gateway
-output "output_aws_internet_gateway" {
-  description = "Output for Internet Gateway"
-  value = aws_internet_gateway.default
-}
+# # Output for Internet Gateway
+# output "output_aws_internet_gateway" {
+#   description = "Output for Internet Gateway"
+#   value = aws_internet_gateway.default
+# }
 
-# Output for Route
-output "output_aws_route" {
-  description = "Output for Route"
-  value = aws_route.internet_access
-}
+# # Output for Route
+# output "output_aws_route" {
+#   description = "Output for Route"
+#   value = aws_route.internet_access
+# }
 
 # Output for Subnet
 output "output_aws_subnet" {
