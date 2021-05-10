@@ -1,20 +1,23 @@
-# # Data Source for VPC
-# data "aws_vpc" "andr_vpc" {
-#     id = ""
-#     state = "available"
-#     tags = {
-#         type = "Andromeda_VPC"
-#     }
-# }
-
-# Create Subnet to launch the ELB
+# Create Subnet 1 to launch the ELB
 resource "aws_subnet" "elb_subnet" {
-  vpc_id                  = var.vpc_id
-  cidr_block              = var.aws_subnet["cidr_block"]
-  map_public_ip_on_launch = var.aws_subnet["map_public_ip_on_launch"]
-  tags = {
-      type = "ELB_Subnet"
-  }
+    availability_zone  = "us-east-1a"
+    vpc_id                  = var.vpc_id
+    cidr_block              = var.aws_subnet["cidr_block"]
+    map_public_ip_on_launch = var.aws_subnet["map_public_ip_on_launch"]
+    tags = {
+        type = "ELB_Subnet"
+    }
+}
+
+# Create Subnet 2 to launch the ELB
+resource "aws_subnet" "subnet_two" {
+    availability_zone  = "us-east-1b"
+    vpc_id                  = var.vpc_id
+    cidr_block              = var.subnet_two["cidr_block"]
+    map_public_ip_on_launch = var.subnet_two["map_public_ip_on_launch"]
+    tags = {
+        type = "ELB_Subnet2"
+    }
 }
 
 # Create Security Group for ELB
@@ -49,7 +52,7 @@ resource "aws_lb" "http_elb" {
   internal           = var.http_elb["internal"]
   load_balancer_type = var.http_elb["load_balancer_type"]
   security_groups    = [aws_security_group.elb_securitygroup.id]
-  subnets            = [aws_subnet.elb_subnet.id]
+  subnets            = [aws_subnet.elb_subnet.id, aws_subnet.subnet_two.id]
   idle_timeout = var.http_elb["idle_timeout"]
   enable_deletion_protection = var.http_elb["enable_deletion_protection"]
   enable_cross_zone_load_balancing = var.http_elb["enable_cross_zone_load_balancing"]
@@ -62,15 +65,14 @@ resource "aws_lb_target_group" "http_target_group" {
     name = var.http_target_group["name"]
     deregistration_delay = var.http_target_group["deregistration_delay"]
     health_check {
-        enabled = var.http_target_group["health_check"]["enabled"]
-        healthy_threshold = var.http_target_group["health_check"]["healthy_threshold"]
-        interval = var.http_target_group["health_check"]["interval"]
+        # enabled = var.http_target_group["health_check"]["enabled"]
+        # healthy_threshold = var.http_target_group["health_check"]["healthy_threshold"]
+        # interval = var.http_target_group["health_check"]["interval"]
         matcher = var.http_target_group["health_check"]["matcher"]
         path = var.http_target_group["health_check"]["path"]
         port = var.http_target_group["health_check"]["port"]
-        protocol = var.http_target_group["health_check"]["protocol"]
-        timeout = var.http_target_group["health_check"]["timeout"]
-        unhealthy_threshold = var.http_target_group["health_check"]["unhealthy_threshold"]
+        # protocol = var.http_target_group["health_check"]["protocol"]
+        # unhealthy_threshold = var.http_target_group["health_check"]["unhealthy_threshold"]
     }
     load_balancing_algorithm_type = var.http_target_group["load_balancing_algorithm_type"]
     port = var.http_target_group["port"]
@@ -121,9 +123,13 @@ resource "aws_lb_listener_rule" "http_elb_listener_rule" {
         host_header {
             values = ["*"]
         }
+    }
+    condition {
         http_request_method {
             values = ["GET"]
         }
+    }
+    condition {
          path_pattern {
             values = ["/rule1"]
         }

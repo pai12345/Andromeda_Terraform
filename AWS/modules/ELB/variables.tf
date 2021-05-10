@@ -6,15 +6,27 @@ variable "aws_subnet" {
         map_public_ip_on_launch = bool
     })
     default = {
-        # cidr_block = "10.0.1.0/24"
-        cidr_block = "0.0.0.0/0"
+        cidr_block = "10.0.0.0/24"
+        map_public_ip_on_launch = true
+    }
+}
+
+# variable for subnet_two
+variable "subnet_two" {
+    description = "Data for aws subnet 2"
+    type = object({
+        cidr_block = string
+        map_public_ip_on_launch = bool
+    })
+    default = {
+        cidr_block = "10.0.8.0/24"
         map_public_ip_on_launch = true
     }
 }
 
 # variable for aws_security_group_elb
 variable "aws_security_group_elb" {
-    description = "Data for ELB Security Group"
+    description = "Data for ALB Security Group"
     type = object({
         name = string
         description = string
@@ -33,7 +45,7 @@ variable "aws_security_group_elb" {
     })
     default = {
         name = "elb_securitygroup"
-        description = "Security Group for ELB"
+        description = "Security Group for ALB"
         ingress = {
             from_port   = 80
             to_port     = 80
@@ -76,6 +88,17 @@ variable "http_elb" {
     }
 }
 
+#   health_check = object({
+#             enabled = bool
+#             healthy_threshold = number
+#             interval = number
+#             matcher = string
+#             path = string
+#             port = number
+#             protocol = string
+#             unhealthy_threshold = number
+#         })
+
 # variable for http_target_group
 variable "http_target_group" {
     description = "Data for ELB Target Group"
@@ -83,15 +106,9 @@ variable "http_target_group" {
         name = string
         deregistration_delay = number
         health_check = object({
-            enabled = bool
-            healthy_threshold = number
-            interval = number
             matcher = string
             path = string
             port = number
-            protocol = string
-            timeout = number
-            unhealthy_threshold = number
         })
         load_balancing_algorithm_type = string
         port = number
@@ -105,15 +122,14 @@ variable "http_target_group" {
         name = "httptargetgroup"
         deregistration_delay = 300
         health_check = {
-            enabled = true
-            healthy_threshold = 3
-            interval = 5
-            matcher = "200-299"
+            # enabled = true
+            # healthy_threshold = 3
+            # interval = 5
+            matcher = "200"
             path = "/"
             port = 80
-            protocol = "HTTP"
-            timeout = 5
-            unhealthy_threshold = 3
+            # protocol = "HTTP"
+            # unhealthy_threshold = 3
         }
         load_balancing_algorithm_type = "round_robin"
         port = 80

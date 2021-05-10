@@ -53,7 +53,6 @@ variable "aws_vpc" {
     tags = map(string)
   })
   default = {
-    # cidr_block = "10.0.0.0/16",
     cidr_block = "0.0.0.0/0"
     instance_tenancy = "default"
     enable_dns_support = false
@@ -93,8 +92,7 @@ variable "aws_subnet" {
     tags = map(string)
   })
   default = {
-    # cidr_block = "10.0.1.0/24"
-    cidr_block = "0.0.0.0/0"
+    cidr_block = "10.0.1.0/24"
     map_public_ip_on_launch = true
     tags = {
       Name = "Andromeda_Subnet"
@@ -104,7 +102,7 @@ variable "aws_subnet" {
 
 # variable for aws_security_group for ssh
 variable "ssh_secgrp" {
-  description = "Data for aws security group for ssh"
+  description = "Data for aws security group for EC2 ssh"
   type = object({
     name = string
     description = string
@@ -124,7 +122,7 @@ variable "ssh_secgrp" {
   })
   default = {
   name  = "ssh_secgrp"
-  description = "aws security group for ssh"
+  description = "aws security group for EC2 SSH"
   ssh_ingress = {
     from_port   = 22
     to_port     = 22
@@ -145,7 +143,7 @@ variable "ssh_secgrp" {
 
 # variable for aws_security_group for http
 variable "http_secgrp" {
-  description = "Data for aws security group for http"
+  description = "Data for aws security group for EC2 http"
   type = object({
     name = string
     description = string
@@ -165,18 +163,17 @@ variable "http_secgrp" {
   })
   default = {
   name  = "http_secgrp"
-  description = "aws security group for http"
+  description = "aws security group for EC2 HTTP"
   http_ingress = {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    # cidr_blocks = ["10.0.0.0/16"]
-    cidr_block = "0.0.0.0/0"
+    cidr_blocks = ["0.0.0.0/0"]
   }
   egress = {
     from_port   = 0
     to_port     = 0
-    protocol    = "-1"
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
   tags = {
