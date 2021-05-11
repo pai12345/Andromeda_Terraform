@@ -12,6 +12,11 @@ data "aws_ami" "ubuntu" {
   owners = var.aws_ami_ubuntu["owners"]
 }
 
+# Fetch nginx configuration file
+data "template_file" "client" {
+  template = file("../modules/EC2/nginx_configure.sh")
+}
+
 # # Fetch IAM instance profile
 # data "aws_iam_instance_profile" "iam_role_ec2" {
 #   name = "ec2_instanceprofile"
@@ -123,4 +128,7 @@ resource "aws_instance" "web" {
   
   # Tags
   tags = var.aws_instance["tags"]
+
+  # Load Web Server
+  user_data = data.template_file.client.rendered
 }

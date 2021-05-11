@@ -83,7 +83,7 @@ variable "http_elb" {
         enable_cross_zone_load_balancing = false
         enable_http2 = true
         tags = {
-            type = "Andromeda_HTTP_ELB"
+            type = "Andromeda_ALB"
             }
     }
 }
@@ -137,7 +137,7 @@ variable "http_target_group" {
         protocol = "HTTP"
         slow_start = 0
         tags = {
-            type = "HTTP_LoadBalancer_EC2"
+            type = "ALB_EC2"
             }
         target_type = "instance"
     }
@@ -151,83 +151,83 @@ variable "http_elb_target_group_attachment" {
     }
 }
 
-# variable for http_elb_listener
-variable "http_elb_listener" {
-    description = "Data for HTTP Load Balancer Listener"
-    type = object({
-        port = number
-        protocol = string
-        default_action = object({
-            type = string
-            fixed_response = object({
-                content_type = string
-                message_body = string
-                status_code = number
-            })
-        })
-    })
-    default = {
-        port              = 8080
-        protocol          = "HTTP"
-        default_action  = {
-            type = "fixed-response"
-            fixed_response  = {
-                content_type = "text/html"
-                message_body = "<h1>Hello World Default<h1>"
-                status_code  = 200
-            }
-        }
-    }
-}
+# # variable for http_elb_listener
+# variable "http_elb_listener" {
+#     description = "Data for Application Load Balancer Listener"
+#     type = object({
+#         port = number
+#         protocol = string
+#         default_action = object({
+#             type = string
+#             fixed_response = object({
+#                 content_type = string
+#                 message_body = string
+#                 status_code = number
+#             })
+#         })
+#     })
+#     default = {
+#         port              = 80
+#         protocol          = "HTTP"
+#         default_action  = {
+#             type = "fixed-response"
+#             fixed_response  = {
+#                 content_type = "text/html"
+#                 message_body = "<h1>Hello World Default<h1>"
+#                 status_code  = 200
+#             }
+#         }
+#     }
+# }
 
-# variable for http_elb_listener_rule
-variable "http_elb_listener_rule" {
-    description = "Data for HTTP Load Balancer Listener Rule"
-    type = object({
-        priority = number
-        action = object({
-            type = string
-            fixed_response = object({
-                content_type = string
-                message_body = string
-                status_code  = number
-            })
-        })
-        condition = object({
-            host_header = object({
-                values = list(string)
-            })
-            http_request_method = object({
-                values = list(string)
-            })
-            path_pattern = object({
-                values = list(string)
-            })
-        })
-    })
-    default = {
-        priority     = 1
-        action = {
-            type = "fixed-response"
-            fixed_response = {
-                content_type = "text/html"
-                message_body = "<h1>Hello World rule 1<h1>"
-                status_code  = 200
-            }
-        }
-        condition = {
-            host_header = {
-                values = ["*"]
-            }
-            http_request_method = {
-                values = ["GET"]
-            }
-            path_pattern = {
-                values = ["/rule1"]
-            }
-        }
-    }
-}
+# # variable for http_elb_listener_rule
+# variable "http_elb_listener_rule" {
+#     description = "Data for HTTP Load Balancer Listener Rule"
+#     type = object({
+#         priority = number
+#         action = object({
+#             type = string
+#             fixed_response = object({
+#                 content_type = string
+#                 message_body = string
+#                 status_code  = number
+#             })
+#         })
+#         condition = object({
+#             host_header = object({
+#                 values = list(string)
+#             })
+#             http_request_method = object({
+#                 values = list(string)
+#             })
+#             path_pattern = object({
+#                 values = list(string)
+#             })
+#         })
+#     })
+#     default = {
+#         priority     = 1
+#         action = {
+#             type = "fixed-response"
+#             fixed_response = {
+#                 content_type = "text/html"
+#                 message_body = "<h1>Hello World rule 1<h1>"
+#                 status_code  = 200
+#             }
+#         }
+#         condition = {
+#             host_header = {
+#                 values = ["*"]
+#             }
+#             http_request_method = {
+#                 values = ["GET"]
+#             }
+#             path_pattern = {
+#                 values = ["/rule1"]
+#             }
+#         }
+#     }
+# }
 
 # variable for vpc_id
 variable "vpc_id" {

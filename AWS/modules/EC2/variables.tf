@@ -162,23 +162,23 @@ variable "http_secgrp" {
     tags = map(string)
   })
   default = {
-  name  = "http_secgrp"
-  description = "aws security group for EC2 HTTP"
-  http_ingress = {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  egress = {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  tags = {
-    Name = "Andromeda_HTTP_Security_Group"
-  }
+    name  = "http_secgrp"
+    description = "aws security group for EC2 HTTP"
+    http_ingress = {
+      from_port   = 80
+      to_port     = 80
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+    egress = {
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+    tags = {
+      Name = "Andromeda_HTTP_Security_Group"
+    }
   }
 }
 

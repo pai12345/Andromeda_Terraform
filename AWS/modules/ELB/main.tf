@@ -5,7 +5,7 @@ resource "aws_subnet" "elb_subnet" {
     cidr_block              = var.aws_subnet["cidr_block"]
     map_public_ip_on_launch = var.aws_subnet["map_public_ip_on_launch"]
     tags = {
-        type = "ELB_Subnet"
+        type = "ALB_Subnet"
     }
 }
 
@@ -16,7 +16,7 @@ resource "aws_subnet" "subnet_two" {
     cidr_block              = var.subnet_two["cidr_block"]
     map_public_ip_on_launch = var.subnet_two["map_public_ip_on_launch"]
     tags = {
-        type = "ELB_Subnet2"
+        type = "ALB_Subnet2"
     }
 }
 
@@ -60,7 +60,7 @@ resource "aws_lb" "http_elb" {
   tags = var.http_elb["tags"]
 }
 
-# Create HTTP ELB Target Group
+# Create ALB Target Group
 resource "aws_lb_target_group" "http_target_group" {
     name = var.http_target_group["name"]
     deregistration_delay = var.http_target_group["deregistration_delay"]
@@ -94,15 +94,11 @@ resource "aws_lb_target_group_attachment" "http_elb_target_group_attachment" {
 # Create a HTTP Load Balancer Listener
 resource "aws_lb_listener" "http_elb_listener" {
     load_balancer_arn = aws_lb.http_elb.arn
-    port              = 8080
+    port              = 80
     protocol          = "HTTP"
     default_action {
-        type = "fixed-response"
-        fixed_response {
-            content_type = "text/html"
-            message_body = "<h1>Hello World Default<h1>"
-            status_code  = 200
-        }
+        type             = "forward"
+        target_group_arn = aws_lb_target_group.http_target_group.arn
     }
 }
 
@@ -110,28 +106,13 @@ resource "aws_lb_listener" "http_elb_listener" {
 resource "aws_lb_listener_rule" "http_elb_listener_rule" {
     listener_arn = aws_lb_listener.http_elb_listener.arn
     priority     = 1
-
     action {
-        type = "fixed-response"
-        fixed_response {
-            content_type = "text/html"
-            message_body = "<h1>Hello World rule 1<h1>"
-            status_code  = 200
-        }
+        type             = "forward"    
+        target_group_arn = aws_lb_target_group.http_target_group.id
     }
     condition {
-        host_header {
-            values = ["*"]
-        }
-    }
-    condition {
-        http_request_method {
-            values = ["GET"]
-        }
-    }
-    condition {
-         path_pattern {
-            values = ["/rule1"]
+        path_pattern {
+            values = ["/"]
         }
     }
 }
