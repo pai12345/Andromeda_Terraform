@@ -5,5 +5,5 @@ module "generate_s3_createbucket"{
     force_destroy = var.force_destroy
     versioning = var.versioning
     sse_algorithm  = var.sse_algorithm
-    tags = var.tags
+    tags = jsondecode(var.tags)
 }
