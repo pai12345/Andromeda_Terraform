@@ -2,6 +2,6 @@ variable "content" {
  description = "Content for file"
 }
 
-variable "directorypermission" {
+variable "directory_permission" {
  description = "Directory Permission for file"
 }
